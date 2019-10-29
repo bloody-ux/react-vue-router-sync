@@ -1,19 +1,36 @@
-import { History, Location } from 'history'
+import { History, Location, createBrowserHistory } from 'history'
 import VueRouter from 'vue-router';
+import { pathJoin, stripBasename } from './utils';
 
-type Disposer = () => void;
+export type Disposer = () => void;
+export interface HistoryOptions {
+  basename?: string;
+}
 
-export default function sync(history: History, router: VueRouter): Disposer {
+function getVueRouterBase(router: VueRouter) {
+  const { base = ''} = (router as any).options || {};
+  return base;
+}
+
+function getHistoryBasename(historyOptions?: HistoryOptions) {
+  const { basename = ''} = historyOptions || {};
+
+  return basename;
+}
+
+export default function sync(history: History, router: VueRouter, historyOptions?: HistoryOptions): Disposer {
+  const basename = getHistoryBasename(historyOptions);
+  const base = getVueRouterBase(router);
+
   const syncFromHistory = (location: Location) => {
     if (!location) return;
 
     const { hash, pathname, search } = location;
-  
-    const newPath = pathname + search + hash;
+    const newPath = pathJoin(basename, pathname) + search + hash;
     const { fullPath } = router.currentRoute;
   
     if (newPath !== fullPath) {
-      router.push(newPath);
+      router.push(stripBasename(newPath, base));
     }
   }
 
@@ -23,9 +40,10 @@ export default function sync(history: History, router: VueRouter): Disposer {
     const { fullPath } = router.currentRoute;
     const { hash, pathname, search } = history.location;
     const oldPath = pathname + search + hash;
+    const newPath = pathJoin(base, fullPath);
 
-    if (fullPath !== oldPath) {
-      history.push(fullPath);
+    if (newPath !== oldPath) {
+      history.push(stripBasename(newPath, basename));
     }
   }
 

@@ -42,7 +42,7 @@ export default function sync(history: History, router: VueRouter, historyOptions
     const { fullPath } = router.currentRoute;
   
     if (newPath !== fullPath) {
-      router.push(newPath);
+      router.replace(newPath);
     }
   }
 
@@ -66,7 +66,7 @@ export default function sync(history: History, router: VueRouter, historyOptions
     );
 
     if (newPath !== oldPath) {
-      history.push(newPath);
+      history.replace(newPath);
     }
   }
 

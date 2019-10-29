@@ -1,7 +1,9 @@
 import { History, Location } from 'history'
 import VueRouter from 'vue-router';
 
-export default function sync(history: History, router: VueRouter) {
+type Disposer = () => void;
+
+export default function sync(history: History, router: VueRouter): Disposer {
   const syncFromHistory = (location: Location) => {
     if (!location) return;
 

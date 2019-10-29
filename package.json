@@ -1,0 +1,27 @@
+{
+  "name": "react-vue-router-sync",
+  "version": "0.1.0",
+  "description": "sync location between React Router and Vue Router",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "father-build"
+  },
+  "keywords": [
+    "react-router",
+    "vue-router",
+    "history",
+    "micro frontend"
+  ],
+  "author": "bloody-ux",
+  "license": "MIT",
+  "devDependencies": {
+    "father-build": "^1.3.3"
+  },
+  "peerDependencies": {
+    "history": ">= 4",
+    "vue": ">= 2",
+    "vue-router": ">= 3"
+  }
+}

@@ -1,5 +1,8 @@
-export default function sync(history, router) {
-  const syncFromHistory = (location) => {
+import { History, Location } from 'history'
+import VueRouter from 'vue-router';
+
+export default function sync(history: History, router: VueRouter) {
+  const syncFromHistory = (location: Location) => {
     if (!location) return;
 
     const { hash, pathname, search } = location;

@@ -1,9 +1,13 @@
 {
   "name": "react-vue-router-sync",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "sync location between React Router and Vue Router",
   "main": "./lib/index.js",
   "module": "./es/index.js",
+  "file": [
+    "es",
+    "lib"
+  ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "father-build"

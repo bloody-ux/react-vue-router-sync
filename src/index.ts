@@ -26,11 +26,14 @@ export default function sync(history: History, router: VueRouter, historyOptions
     if (!location) return;
 
     const { hash, pathname, search } = location;
-    const newPath = pathJoin(basename, pathname) + search + hash;
+    const newPath = stripBasename(
+      pathJoin(basename, pathname) + search + hash,
+      base,
+    );
     const { fullPath } = router.currentRoute;
   
     if (newPath !== fullPath) {
-      router.push(stripBasename(newPath, base));
+      router.push(newPath);
     }
   }
 
@@ -40,10 +43,13 @@ export default function sync(history: History, router: VueRouter, historyOptions
     const { fullPath } = router.currentRoute;
     const { hash, pathname, search } = history.location;
     const oldPath = pathname + search + hash;
-    const newPath = pathJoin(base, fullPath);
+    const newPath = stripBasename(
+      pathJoin(base, fullPath),
+      basename,
+    );
 
     if (newPath !== oldPath) {
-      history.push(stripBasename(newPath, basename));
+      history.push(newPath);
     }
   }
 

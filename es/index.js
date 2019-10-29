@@ -25,11 +25,11 @@ export default function sync(history, router, historyOptions) {
     var hash = location.hash,
         pathname = location.pathname,
         search = location.search;
-    var newPath = pathJoin(basename, pathname) + search + hash;
+    var newPath = stripBasename(pathJoin(basename, pathname) + search + hash, base);
     var fullPath = router.currentRoute.fullPath;
 
     if (newPath !== fullPath) {
-      router.push(stripBasename(newPath, base));
+      router.push(newPath);
     }
   };
 
@@ -41,10 +41,10 @@ export default function sync(history, router, historyOptions) {
         pathname = _history$location.pathname,
         search = _history$location.search;
     var oldPath = pathname + search + hash;
-    var newPath = pathJoin(base, fullPath);
+    var newPath = stripBasename(pathJoin(base, fullPath), basename);
 
     if (newPath !== oldPath) {
-      history.push(stripBasename(newPath, basename));
+      history.push(newPath);
     }
   };
 

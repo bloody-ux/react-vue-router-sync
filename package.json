@@ -9,7 +9,7 @@
     "lib"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublish": "npm run build",
     "build": "father-build"
   },
   "keywords": [

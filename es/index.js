@@ -36,7 +36,7 @@ export default function sync(history, router, historyOptions) {
     var fullPath = router.currentRoute.fullPath;
 
     if (newPath !== fullPath) {
-      router.push(newPath);
+      router.replace(newPath);
     }
   };
 
@@ -58,7 +58,7 @@ export default function sync(history, router, historyOptions) {
     var newPath = stripBasename(fullNewPath, basename);
 
     if (newPath !== oldPath) {
-      history.push(newPath);
+      history.replace(newPath);
     }
   };
 

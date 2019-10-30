@@ -1,4 +1,9 @@
-import { pathJoin, stripBasename, hasBasename } from './utils';
+import { stripBasename, hasBasename } from './utils';
+
+function getCurrentURLPath() {
+  var path = decodeURI(window.location.pathname);
+  return path + window.location.search + window.location.hash;
+}
 
 function getVueRouterBase(router) {
   var _ref = router.options || {},
@@ -17,45 +22,47 @@ function getHistoryBasename(historyOptions) {
 }
 
 export default function sync(history, router, historyOptions) {
+  // only support browserHistory
+  if (router.mode !== 'history') return;
   var basename = getHistoryBasename(historyOptions);
   var base = getVueRouterBase(router);
 
-  var syncFromHistory = function syncFromHistory(location) {
-    if (!location) return;
-    var hash = location.hash,
-        pathname = location.pathname,
-        search = location.search; // new history path
-
-    var fullNewPath = pathJoin(basename, pathname) + search + hash; // if new path doesn't has base, ignore
+  var syncFromHistory = function syncFromHistory() {
+    // new history path
+    var fullNewPath = getCurrentURLPath(); // if new path doesn't has base, ignore
 
     if (base && !hasBasename(fullNewPath, base)) {
       return;
-    }
+    } // get vue router new path
 
-    var newPath = stripBasename(fullNewPath, base);
-    var fullPath = router.currentRoute.fullPath;
 
-    if (newPath !== fullPath) {
+    var newPath = stripBasename(fullNewPath, base); // get current vue-router path
+
+    var oldPath = router.currentRoute.fullPath;
+
+    if (newPath !== oldPath) {
       router.replace(newPath);
     }
   };
 
   var syncToHistory = function syncToHistory() {
-    if (!router.currentRoute) return;
-    var fullPath = router.currentRoute.fullPath;
+    if (!router.currentRoute) return; // get new history path
+
+    var fullNewPath = getCurrentURLPath(); // if new path doesn't match with basename
+    // do nothing
+
+    if (basename && !hasBasename(fullNewPath, basename)) {
+      return;
+    } // get new path for history
+
+
+    var newPath = stripBasename(fullNewPath, basename); // get current history path
+
     var _history$location = history.location,
         hash = _history$location.hash,
         pathname = _history$location.pathname,
         search = _history$location.search;
     var oldPath = pathname + search + hash;
-    var fullNewPath = pathJoin(base, fullPath); // if new path doesn't match with basename
-    // do nothing
-
-    if (basename && !hasBasename(fullNewPath, basename)) {
-      return;
-    }
-
-    var newPath = stripBasename(fullNewPath, basename);
 
     if (newPath !== oldPath) {
       history.replace(newPath);

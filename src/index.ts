@@ -56,27 +56,29 @@ export default function sync(history: History, router: VueRouter, historyOptions
   const syncToHistory = () => {
     if (!router.currentRoute) return;
   
-    // get new history path
-    const fullNewPath = getCurrentURLPath();
-    // if new path doesn't match with basename
-    // do nothing
-    if (basename && !hasBasename(fullNewPath, basename)) {
-      return;
-    }
+    setTimeout(() => {
+      // get new history path
+      const fullNewPath = getCurrentURLPath();
+      // if new path doesn't match with basename
+      // do nothing
+      if (basename && !hasBasename(fullNewPath, basename)) {
+        return;
+      }
 
-    // get new path for history
-    const newPath = stripBasename(
-      fullNewPath,
-      basename,
-    );
+      // get new path for history
+      const newPath = stripBasename(
+        fullNewPath,
+        basename,
+      );
 
-    // get current history path
-    const { hash, pathname, search } = history.location;
-    const oldPath = pathname + search + hash;
+      // get current history path
+      const { hash, pathname, search } = history.location;
+      const oldPath = pathname + search + hash;
 
-    if (newPath !== oldPath) {
-      history.replace(newPath);
-    }
+      if (newPath !== oldPath) {
+        history.replace(newPath);
+      }
+    }, 0);
   }
 
   const unlisten = history.listen(syncFromHistory);

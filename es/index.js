@@ -46,27 +46,31 @@ export default function sync(history, router, historyOptions) {
   };
 
   var syncToHistory = function syncToHistory() {
-    if (!router.currentRoute) return; // get new history path
+    if (!router.currentRoute) return; // delay to window.location.href change
+    // which matches the behavior of react-router
 
-    var fullNewPath = getCurrentURLPath(); // if new path doesn't match with basename
-    // do nothing
+    Promise.resolve().then(function () {
+      // get new history path
+      var fullNewPath = getCurrentURLPath(); // if new path doesn't match with basename
+      // do nothing
 
-    if (basename && !hasBasename(fullNewPath, basename)) {
-      return;
-    } // get new path for history
+      if (basename && !hasBasename(fullNewPath, basename)) {
+        return;
+      } // get new path for history
 
 
-    var newPath = stripBasename(fullNewPath, basename); // get current history path
+      var newPath = stripBasename(fullNewPath, basename); // get current history path
 
-    var _history$location = history.location,
-        hash = _history$location.hash,
-        pathname = _history$location.pathname,
-        search = _history$location.search;
-    var oldPath = pathname + search + hash;
+      var _history$location = history.location,
+          hash = _history$location.hash,
+          pathname = _history$location.pathname,
+          search = _history$location.search;
+      var oldPath = pathname + search + hash;
 
-    if (newPath !== oldPath) {
-      history.replace(newPath);
-    }
+      if (newPath !== oldPath) {
+        history.replace(newPath);
+      }
+    });
   };
 
   var unlisten = history.listen(syncFromHistory);

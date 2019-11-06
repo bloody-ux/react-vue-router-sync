@@ -56,7 +56,9 @@ export default function sync(history: History, router: VueRouter, historyOptions
   const syncToHistory = () => {
     if (!router.currentRoute) return;
   
-    setTimeout(() => {
+    // delay to window.location.href change
+    // which matches the behavior of react-router
+    Promise.resolve().then(() => {
       // get new history path
       const fullNewPath = getCurrentURLPath();
       // if new path doesn't match with basename
@@ -78,7 +80,7 @@ export default function sync(history: History, router: VueRouter, historyOptions
       if (newPath !== oldPath) {
         history.replace(newPath);
       }
-    }, 0);
+    });
   }
 
   const unlisten = history.listen(syncFromHistory);
